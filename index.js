@@ -12,3 +12,22 @@ I need this code, but don't know where, perhaps should make some middleware, don
 
 Go code!
 */
+
+const express = require('express')
+const actionsRouter = require('./routes/actions-router')
+const projectsRouter = require('./routes/projects-router')
+const server = express()
+const port = 7000
+
+server.use(express.json())
+
+server.use('/actions', actionsRouter)
+server.use('/projects', projectsRouter)
+
+server.listen(port, () => {
+    console.log(`\n *** Server is listening on port ${port} *** \n`)
+})
+
+server.get('/', (req, res) => {
+    res.send("<h1>Sever is running...</h1> <br /> <h2>You can try typing /actions or /projects in the current localhost url</h2>")
+})
