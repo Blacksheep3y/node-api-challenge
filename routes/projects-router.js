@@ -131,7 +131,7 @@ function findID(req, res, next) {
         .catch(err => {
             console.log(err)
             res.status(500).json({
-                Message: "Request for `ID` couldn't be found!"
+                Message: "Request for `ID` in projects couldn't be found!"
             })
         })
 }
