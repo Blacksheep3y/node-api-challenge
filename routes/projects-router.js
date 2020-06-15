@@ -13,7 +13,7 @@ router.post('/', (req, res) => {
         .then(project => {
             if (!req.body.name || !req.body.description || req.body.completed) {
                 res.status(400).json({
-                    Message: 'data is missing from one of the previous entries'
+                    Message: 'Data is missing from one of the previous entries'
                 })
             } else {
                 pMod.insert(req.body)
@@ -59,10 +59,52 @@ router.get('/:id', (req, res) => {
         })
 })
 
+router.get('/:id/actions', (req, res) => {
+    pMod.getProjectActions(req.params.id)
+        .then(action => {
+            res.status(200).json(action)
+        })
+        .catch(err => {
+            res.status(500).json({
+                Message: 'Action could not be found or it may not exist'
+            })
+        })
+})
+
 
 
 
 // PUT - UPDATE
+router.put('/:id', (req, res) => {
+    pMod.get(req.params.id)
+        .then(project => {
+            if (project.length === 0) {
+                res.status(404).json({
+                    Message: 'Post could not be made'
+                })
+            } else if (!req.body.name || !req.body.description || req.body.completed) {
+                res.status(400).json({
+                    Message: 'Data is missing from a previous entry'
+                })
+            } else {
+                pMod.update(req.params.id, req.body)
+                    .then(project => {
+                        res.status(201).json(req.body)
+                    })
+                    .catch(err => {
+                        res.status(500).json({
+                            Message: 'Post has failed!'
+                        })
+                    })
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ Message: 'OOPS! Something went wrong!' })
+        })
+})
+
+
+
 
 // DELETE - DELETE
 
