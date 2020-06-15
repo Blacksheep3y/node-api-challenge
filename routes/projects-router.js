@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const pMod = require('../data/helpers/projectModel');
-// router.use('/:id', findID)
+router.use('/:id', findID)
 
 
 
@@ -107,5 +107,34 @@ router.put('/:id', (req, res) => {
 
 
 // DELETE - DELETE
+router.delete('/:id', (req, res) => {
+    pMod.remove(req.params.id)
+        .then(project => {
+            res.status(200).json({ message: 'Project at this `ID` has been removed' })
+        })
+})
+
+
+function findID(req, res, next) {
+    const id = req.params.id
+    pMod.get(id)
+        .then(project => {
+            if (!project) {
+                res.status(400).json({
+                    Message: "The project at this `ID` doesn't exist"
+                })
+            } else {
+                req.project = project
+                next()
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({
+                Message: "Request for `ID` couldn't be found!"
+            })
+        })
+}
+
 
 module.exports = router;
