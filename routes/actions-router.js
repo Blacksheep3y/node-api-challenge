@@ -62,9 +62,9 @@ router.put('/:id', (req, res) => {
                 res.status(404).json({
                     Message: 'Post could not be completed'
                 })
-            } else if (!req.body.project_id || !req.body.description || !req.body.completed) {
+            } else if (!req.body.project_id || !req.body.description || req.body.completed) {
                 res.status(400).json({
-                    Message: 'Data is missing from one of the previous entries'
+                    Message: 'Data is missing from one of the previous entries or `Completed` is equal to `true` for this action'
                 })
             } else {
                 aMod.update(req.params.id, req.body)
@@ -73,7 +73,7 @@ router.put('/:id', (req, res) => {
                     })
                     .catch(err => {
                         res.status(500).json({
-                            Message: 'Post has failed!'
+                            Message: 'Post has failed! POSSIBLE that project `ID` does not exist or Something went wrong!'
                         })
                     })
             }
