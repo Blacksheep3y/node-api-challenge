@@ -3,12 +3,14 @@
   // use express on Router
   const router = express.Router()
   // use middleware
+  const ah = require('../data/helpers/actionModel')
   const {validateIdA} = require('../middleware/ap-midware')
 
+// GET Actions
 router.get('/', (req, res) => {
     res.status(200).json(`there are no actions that lack an id`)
 })
-
+// GET Actions by ID
 router.get('/:id', validateIdA, (req, res) => {
     ah.get(req.params.id)
         .then(action => {
@@ -19,7 +21,7 @@ router.get('/:id', validateIdA, (req, res) => {
             res.status(500).json({ Message: 'there is no action at this id' })
         })
 })
-
+// POST Action
 router.post('/', (req, res) => {
     ah.get()
         .then(action => {
@@ -43,7 +45,7 @@ router.post('/', (req, res) => {
             res.status(500).json({ Message: 'Something went wrong!' })
         })
 })
-
+// PUT (EDIT) ACTION by ID
 router.put('/:id', validateIdA, (req, res) => {
     ah.get(req.params.id)
         .then(action => {
@@ -71,10 +73,12 @@ router.put('/:id', validateIdA, (req, res) => {
             res.status(500).json({ Message: 'this is an error message' })
         })
 })
-
+// DELETE Action by ID
 router.delete('/:id', validateIdA, (req, res) => {
     ah.remove(req.params.id)
         .then(action => {
             res.status(200).json({ message: 'project has been deleted', project: req.action })
         })
 })
+
+module.exports = router;
